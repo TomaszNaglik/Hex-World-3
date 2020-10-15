@@ -4,7 +4,8 @@ public class NewMapMenu : MonoBehaviour {
 
 	public HexGrid hexGrid;
 
-	public HexMapGenerator mapGenerator;
+	//public HexMapGenerator mapGenerator;
+	public TN_MapGenerator mapGenerator;
 
 	bool generateMaps = true;
 

@@ -63,25 +63,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Bezier.cs" />
-    <Compile Include="Assets\Scripts\EdgeVertices.cs" />
-    <Compile Include="Assets\Scripts\HexCell.cs" />
-    <Compile Include="Assets\Scripts\HexCellPriorityQueue.cs" />
-    <Compile Include="Assets\Scripts\HexCellShaderData.cs" />
-    <Compile Include="Assets\Scripts\HexCoordinates.cs" />
-    <Compile Include="Assets\Scripts\HexDirection.cs" />
-    <Compile Include="Assets\Scripts\HexEdgeType.cs" />
-    <Compile Include="Assets\Scripts\HexFeatureCollection.cs" />
-    <Compile Include="Assets\Scripts\HexFeatureManager.cs" />
-    <Compile Include="Assets\Scripts\HexGrid.cs" />
-    <Compile Include="Assets\Scripts\HexGridChunk.cs" />
-    <Compile Include="Assets\Scripts\HexHash.cs" />
-    <Compile Include="Assets\Scripts\HexMapCamera.cs" />
-    <Compile Include="Assets\Scripts\HexMapGenerator.cs" />
-    <Compile Include="Assets\Scripts\HexMesh.cs" />
-    <Compile Include="Assets\Scripts\HexMetrics.cs" />
-    <Compile Include="Assets\Scripts\HexUnit.cs" />
-    <Compile Include="Assets\Scripts\ListPool.cs" />
+    <Compile Include="Assets\Scripts\CustomScripts\TN_MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\Bezier.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\EdgeVertices.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexCell.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexCellPriorityQueue.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexCellShaderData.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexCoordinates.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexDirection.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexEdgeType.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexFeatureCollection.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexFeatureManager.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexGrid.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexGridChunk.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexHash.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexMapCamera.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexMapGenerator.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexMesh.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexMetrics.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\HexUnit.cs" />
+    <Compile Include="Assets\Scripts\HexScripts\ListPool.cs" />
     <Compile Include="Assets\Scripts\UI\HexGameUI.cs" />
     <Compile Include="Assets\Scripts\UI\HexMapEditor.cs" />
     <Compile Include="Assets\Scripts\UI\NewMapMenu.cs" />
