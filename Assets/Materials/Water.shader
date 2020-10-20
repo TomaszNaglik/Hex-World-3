@@ -2,6 +2,7 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
+		_BumpMap("Bumpmap", 2D) = "bump" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 	}
@@ -19,9 +20,11 @@
 		#include "HexCellData.cginc"
 
 		sampler2D _MainTex;
+		sampler2D _BumpMap;
 
 		struct Input {
 			float2 uv_MainTex;
+			float2 uv_BumpMap;
 			float3 worldPos;
 			float2 visibility;
 		};
@@ -37,20 +40,20 @@
 			float4 cell1 = GetCellData(v, 1);
 			float4 cell2 = GetCellData(v, 2);
 
-			data.visibility.x =
-				cell0.x * v.color.x + cell1.x * v.color.y + cell2.x * v.color.z;
+			data.visibility.x =	cell0.x * v.color.x + cell1.x * v.color.y + cell2.x * v.color.z;
 			data.visibility.x = lerp(0.25, 1, data.visibility.x);
-			data.visibility.y =
-				cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
+			data.visibility.y =	cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
 			float waves = Waves(IN.worldPos.xz, _MainTex);
 			fixed4 c = saturate(_Color + waves);
+			fixed3 n = UnpackNormal(tex2D(_BumpMap, IN.uv_MainTex));
 
 			float explored = IN.visibility.y;
 			o.Albedo = c.rgb * IN.visibility.x;
 			o.Specular = _Specular * explored;
+			//o.Normal = n;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
 			o.Alpha = c.a * explored;

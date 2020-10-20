@@ -2869,7 +2869,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000000953677, y: 22}
+  m_AnchoredPosition: {x: 0, y: 22}
   m_SizeDelta: {x: -8, y: -104}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &383762203
@@ -11589,7 +11589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 1571186511}
-  mapGenerator: {fileID: 2056945512}
+  mapGenerator: {fileID: 2056945514}
 --- !u!1 &1651949012
 GameObject:
   m_ObjectHideFlags: 0
@@ -14781,6 +14781,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2056945513}
   - component: {fileID: 2056945512}
+  - component: {fileID: 2056945514}
   m_Layer: 0
   m_Name: Hex Map Generator
   m_TagString: Untagged
@@ -14844,6 +14845,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2056945514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056945511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec1cdb0addaa7641900fcdbb74666e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexGrid: {fileID: 1571186511}
 --- !u!1 &2073486282
 GameObject:
   m_ObjectHideFlags: 0

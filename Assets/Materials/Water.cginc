@@ -42,8 +42,8 @@ float Waves (float2 worldXZ, sampler2D noiseTex) {
 
 	float blendWave = sin(
 		(worldXZ.x + worldXZ.y) * 0.1 +
-		(noise1.y + noise2.z) + _Time.y
-	);
+		(noise1.y + noise2.z) + _Time.y/2
+	)/2;
 	blendWave *= blendWave;
 
 	float waves =
