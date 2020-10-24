@@ -1,7 +1,7 @@
 ﻿#include "HexMetrics.cginc"
 
 float Foam (float shore, float2 worldXZ, sampler2D noiseTex) {
-	shore = sqrt(shore) * 0.9;
+	shore = sqrt(shore) * 0.19;
 
 	float2 noiseUV = worldXZ + _Time.y * 0.25;
 	float4 noise = tex2D(noiseTex, noiseUV * (2 * TILING_SCALE));
@@ -12,7 +12,7 @@ float Foam (float shore, float2 worldXZ, sampler2D noiseTex) {
 
 	float distortion2 = noise.y * (1 - shore);
 	float foam2 = sin((shore + distortion2) * 10 + _Time.y + 2);
-	foam2 *= foam2 * 0.7;
+	foam2 *= foam2 * 0.17;
 
 	return max(foam1, foam2) * shore;
 }

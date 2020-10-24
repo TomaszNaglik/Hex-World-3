@@ -10,6 +10,8 @@ public class HexCell : MonoBehaviour {
 
 	public HexGridChunk chunk;
 
+	private TN_Region region;
+
 	public int Index { get; set; }
 
 	public int ColumnIndex { get; set; }
@@ -276,6 +278,7 @@ public class HexCell : MonoBehaviour {
 	public HexCell NextWithSamePriority { get; set; }
 
 	public HexCellShaderData ShaderData { get; set; }
+	public TN_Region Region { get => region; set => region = value; }
 
 	int terrainTypeIndex;
 

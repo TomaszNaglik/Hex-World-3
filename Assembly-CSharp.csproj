@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CustomScripts\TN_MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\CustomScripts\TN_Region.cs" />
     <Compile Include="Assets\Scripts\HexScripts\Bezier.cs" />
     <Compile Include="Assets\Scripts\HexScripts\EdgeVertices.cs" />
     <Compile Include="Assets\Scripts\HexScripts\HexCell.cs" />
@@ -94,12 +95,10 @@
     <None Include="Assets\Materials\SzarkWater.shader" />
     <None Include="Assets\Materials\HexCellData.cginc" />
     <None Include="Assets\Materials\Water.cginc" />
-    <None Include="Assets\#NVJOB Simple Water Shaders\license_unity.txt" />
     <None Include="Assets\Materials\Road.shader" />
     <None Include="Assets\Materials\Water.shader" />
     <None Include="Assets\Materials\HexMetrics.cginc" />
     <None Include="Assets\Materials\Water Shore.shader" />
-    <None Include="Assets\#NVJOB Simple Water Shaders\license_nvjob.txt" />
     <None Include="Assets\Materials\Features\Feature.shader" />
     <None Include="Assets\Materials\Estuary.shader" />
     <Reference Include="Unity.Timeline.Editor">
