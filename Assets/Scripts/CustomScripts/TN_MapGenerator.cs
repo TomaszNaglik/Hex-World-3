@@ -1,15 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TN_MapGenerator : MonoBehaviour
 {
-    public int numRegions;
-    public List<TN_Region> regions;
+    private int maxNumAttempts = 100;
+    public int numPlates;
+    public int cellsPerRegion;
+    private List<TN_PlateTectonic> plates;
+    private List<TN_Region> regions;
+    private List<TN_Landmass> landmasses;
+
+    public int numContinents;
+    public int numIslands;
+
+    public float landmassPercentage;
+    private int regionLandBudget;
     
     public HexGrid hexGrid;
     internal void GenerateMap(int x, int z, bool wrapping)
     {
         hexGrid.CreateMap(x, z, wrapping);
+        regions = new List<TN_Region>();
+        landmasses = new List<TN_Landmass>();
+        plates = new List<TN_PlateTectonic>();
         GenerateLand();
 
 
@@ -18,38 +32,134 @@ public class TN_MapGenerator : MonoBehaviour
     void GenerateLand()
     {
         int cellCount = hexGrid.cellCountX * hexGrid.cellCountZ;
+        GenerateCells(cellCount);
+        GeneratePlateTectonicSeeds(cellCount);
+        ExpandPlateTectonics();
+        GenerateRegionSeeds();
+        ExpandRegions();
+        FindRegionNeighbours();
+        //GetMountains();
+
+        
+        CreateLandmasses();
+        
+        
+
+        
+
+       
+
+        
+
+        
+
+
+    }
+
+    private void CreateLandmasses()
+    {
+        foreach (TN_PlateTectonic plate in plates)
+        {
+            foreach (TN_Region region0 in plate.Regions)
+            {
+                regions.Add(region0);
+            }
+        }
+        regionLandBudget = (int)(regions.Count * landmassPercentage);
+        TN_Region region;
+        TN_Landmass continent;
+        int numAttempts = 0;
+        Debug.Log("Regions num:" +regions.Count);
+        while (landmasses.Count < numContinents && numAttempts < maxNumAttempts)
+        {
+            numAttempts++;
+            region = regions[UnityEngine.Random.Range(0, regions.Count-1)];
+            if (!region.IsPolar && region.Landmass == null && !region.BordersLandmass)
+            {
+                continent = new TN_Landmass(region, true, 2);
+                landmasses.Add(continent);
+            }
+
+        }
+        Debug.Log("Attempts: " + numAttempts);
+        Debug.Log("Generated continents: "+landmasses.Count);
+    }
+
+    private void GeneratePlateTectonicSeeds(int cellCount)
+    {
+       
+        for (int i = 0; i < numPlates; i++)
+        {
+            TN_PlateTectonic plate = new TN_PlateTectonic(hexGrid.GetCell(UnityEngine.Random.Range(0, cellCount - 1)), cellsPerRegion);
+            plates.Add(plate);
+
+
+        }
+    }
+
+    private void ExpandPlateTectonics()
+    {
         bool canExpand = true;
-        HexCell cell;
-        for (int i = 0; i < cellCount; i++)
-        {
-            cell = hexGrid.GetCell(i);
-            cell.TerrainTypeIndex = 1;
-            cell.WaterLevel = 1;
-            cell.Elevation = 1;
-        }
-
-        regions = new List<TN_Region>();
-        for (int i = 0; i< numRegions; i++)
-        {
-            TN_Region region = new TN_Region(hexGrid.GetCell(Random.Range(0, cellCount - 1)));
-            regions.Add(region);
-            
-            
-        }
-
         while (canExpand)
         {
             canExpand = false;
-            for (int i = 0; i < regions.Count; i++)
+            for (int i = 0; i < plates.Count; i++)
             {
-                if (regions[i].Expand())
+                if (plates[i].Expand())
                 {
                     canExpand = true;
                 }
             }
         }
-        
+    }
 
+    
+
+    private void GenerateCells(int cellCount)
+    {
+        HexCell cell;
+        for (int i = 0; i<cellCount; i++)
+        {
+            cell = hexGrid.GetCell(i);
+            cell.TerrainTypeIndex = 1;
+            cell.WaterLevel = 2;
+            cell.Elevation = 1;
+        }
+    }
+
+    
+    private void GenerateRegionSeeds()
+    {
+        foreach(TN_PlateTectonic plate in plates)
+        {
+            plate.GenerateRegionSeeds();
+            
+        }
+    }
+    private void ExpandRegions()
+    {
+        foreach (TN_PlateTectonic plate in plates)
+        {
+            plate.ExpandRegions();
+            
+        }
+        
+    }
+
+    private void FindRegionNeighbours()
+    {
+        foreach (TN_PlateTectonic plate in plates)
+        {
+            plate.FindRegionNeighbours();
+        }
 
     }
+
+   /* private void GetMountains()
+    {
+        foreach (TN_PlateTectonic plate in plates)
+        {
+            plate.GetMountains();
+        }
+    }*/
 }

@@ -14857,7 +14857,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec1cdb0addaa7641900fcdbb74666e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numRegions: 5
+  numPlates: 20
+  cellsPerRegion: 20
   hexGrid: {fileID: 1571186511}
 --- !u!1 &2073486282
 GameObject:

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
@@ -7,36 +8,76 @@ public class TN_Region
 {
     List<HexCell> cells;
     List<HexCell> frontier;
+    List<TN_Region> neighbours;
+    private TN_PlateTectonic plate;
     private static int regionCounter = 0;
     public Color color;
     private int terrainIndex;
     private int elevationIndex;
     private int ID;
+    private TN_Landmass landmass;
     public int TerrainIndex { get => terrainIndex; set => terrainIndex = value; }
-    public int ElevationIndex { get => elevationIndex; set => elevationIndex = value; }
 
-    
+    public int GetElevationIndex()
+    {
+        return elevationIndex;
+    }
 
+    public void SetElevationIndex(int value)
+    {
+        elevationIndex = value;
+        foreach (HexCell cell in cells)
+        {
+            cell.Elevation = elevationIndex;
+        }
+    }
+    public TN_PlateTectonic Plate { get => plate; set => plate = value; }
+    public TN_Landmass Landmass { get => landmass;  set => landmass = value; }
+    public bool BordersLandmass
+    {
+        get
+        {
+            foreach(TN_Region neighbour in neighbours)
+            {
+                if(neighbour!= null && neighbour.Landmass != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public bool IsPolar { get => isPolar; set => isPolar = value; }
+
+    private bool isPolar;
     public TN_Region(HexCell cell)
     {
         ID = regionCounter;
         regionCounter++;
-        
-        TerrainIndex = Random.Range(0, 5);
-        ElevationIndex = 2;
-        if(Random.value > 0.8f)
+
+
+        color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+        cells = new List<HexCell>();
+        frontier = new List<HexCell>();
+        neighbours = new List<TN_Region>();
+
+        TerrainIndex = UnityEngine.Random.Range(0, 5);
+        SetElevationIndex(2);
+        if(UnityEngine.Random.value > 1.0f)
         {
-            ElevationIndex = 1;
+            SetElevationIndex(1);
         }
         else
         {
-            ElevationIndex = 0;
+            SetElevationIndex(0);
         }
-        color = new Color(Random.value, Random.value, Random.value);
-        cells = new List<HexCell>();
-        frontier = new List<HexCell>();
+       
+        plate = cell.Plate;
         AddCell(cell);
     }
+
+    
     private bool AddCell (HexCell cell)
     {
         if (cells.Contains(cell))
@@ -47,9 +88,13 @@ public class TN_Region
         }
         cell.Region = this;
         cells.Add(cell);
-        cell.TerrainTypeIndex = TerrainIndex;
-        cell.Elevation = ElevationIndex;
-        cell.EnableHighlight(Color.green);
+        //cell.TerrainTypeIndex = TerrainIndex;
+        cell.Elevation = GetElevationIndex();
+        cell.EnableHighlight(this.color);
+        if (cell.IsPolar)
+        {
+            this.isPolar = true;
+        }
         return true;
     }
 
@@ -61,28 +106,16 @@ public class TN_Region
             return false;
         }
 
-        bool result = false;
-        HexCell cell = frontier[Random.Range(0, frontier.Count - 1)];
-        if ( AddCell(cell))
-        {
-            Debug.Log("Region: " + ID + " added " + cell.coordinates);
-            cell.EnableHighlight(this.color);
-            result = true;
-        }
-
-        return result;
+        return AddCell(frontier[UnityEngine.Random.Range(0, frontier.Count)]);
         
        
     }
 
+    
+
     private void PopulateFrontier()
     {
-       /* Debug.Log("Before adding frontier to Region: " + ID + " Region as these cells: ");
-        for (int i = 0; i < cells.Count; i++)
-        {
-            Debug.Log("Cell "+i+": "+cells[i].coordinates);
-        }*/
-            frontier.Clear();
+        frontier.Clear();
         for (int i = 0; i< cells.Count; i++)
         {
             HexCell cell = cells[i];
@@ -90,19 +123,87 @@ public class TN_Region
             for(int j=0; j< 6; j++)
             {
                 neighbour = cell.GetNeighbor((HexDirection)j);
-                if (neighbour != null && neighbour.Region == null)
+                
+                if (neighbour != null && neighbour.Plate.ID == this.Plate.ID && neighbour.Region == null)
                 {
-
-                    frontier.Add(neighbour);
-                    neighbour.SetLabel(neighbour.coordinates.ToString());
-                    //Debug.Log("Region: " + ID + " added " +neighbour.coordinates+" to FrontierList");
+                   frontier.Add(neighbour);
+                  
                 }
             }
         }
-        /*Debug.Log("After adding frontier to Region: " + ID + " Region as these cells in the frontier: ");
-        for (int i = 0; i < frontier.Count; i++)
-        {
-            Debug.Log("Cell " + i + ": " + frontier[i].coordinates);
-        }*/
+        
     }
+
+    internal void FindNeighbours()
+    {
+        HexCell cell;
+        HexCell neighbour;
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cell = cells[i];
+            for (int j = 0; j < 6; j++)
+            {
+                neighbour = cell.GetNeighbor((HexDirection)j);
+
+                if (neighbour != null && neighbour.Region != cell.Region)
+                {
+                    cell.IsRegionBorder = true;
+                    cell.neighbourRegion = neighbour.Region;
+                    if (!neighbours.Contains(neighbour.Region))
+                    {
+                        
+                            neighbours.Add(neighbour.Region);
+
+                        
+                    }
+
+                    if (neighbour.Plate != cell.Plate)
+                    {
+                        cell.IsPlateBorder = true;
+                        cell.neighbourPlate = neighbour.Plate;
+                    }
+
+                }
+                    
+                
+            }
+        }
+    }
+
+    /*internal void GetMountains()
+    {
+       
+        foreach(HexCell cell in cells)
+        {
+            if (cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction))
+            {
+                if (UnityEngine.Random.value > 0.4f)
+                {
+                    cell.Elevation += 3;
+                    cell.TerrainTypeIndex = 5;
+                }
+                if (cell.GetNeighbor(cell.Plate.Direction).Region.ElevationIndex < 1)
+                {
+                    ElevationIndex = cell.GetNeighbor(cell.Plate.Direction).Region.ElevationIndex + 1;
+                }
+            }
+            if (cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Next(HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction))
+                || cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Previous(HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction)))
+            {
+                if (UnityEngine.Random.value > 0.6f)
+                {
+                    cell.Elevation += 2;
+                    cell.TerrainTypeIndex = 3;
+                }
+            }
+        }
+        foreach (HexCell cell in cells)
+        {
+            cell.Elevation += ElevationIndex;
+        }
+    }*/
+
+   
+
 }
+

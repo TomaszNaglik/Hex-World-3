@@ -10,7 +10,8 @@ public class HexCell : MonoBehaviour {
 
 	public HexGridChunk chunk;
 
-	private TN_Region region;
+	public TN_Region region;
+	public TN_PlateTectonic plate;
 
 	public int Index { get; set; }
 
@@ -279,7 +280,15 @@ public class HexCell : MonoBehaviour {
 
 	public HexCellShaderData ShaderData { get; set; }
 	public TN_Region Region { get => region; set => region = value; }
+	public TN_PlateTectonic Plate { get => plate; set => plate = value; }
+	public bool IsPlateBorder { get => isPlateBorder;  set => isPlateBorder = value; }
+	public bool IsRegionBorder { get => isRegionBorder; set => isRegionBorder = value; }
 
+	bool isPlateBorder;
+	bool isRegionBorder;
+
+	public TN_PlateTectonic neighbourPlate;
+	public TN_Region neighbourRegion;
 	int terrainTypeIndex;
 
 	int elevation = int.MinValue;
@@ -305,8 +314,22 @@ public class HexCell : MonoBehaviour {
 
 	[SerializeField]
 	bool[] roads;
+    public bool IsPolar { get 
+		{
+			foreach(HexCell neighbour in neighbors)
+			{
+				if(neighbour == null)
+				{
+					return true;
+				}
 
-	public void IncreaseVisibility () {
+			}
+			return false;
+		} 
+	}
+
+
+    public void IncreaseVisibility () {
 		visibility += 1;
 		if (visibility == 1) {
 			IsExplored = true;

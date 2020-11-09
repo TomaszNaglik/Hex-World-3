@@ -63,7 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\CustomScripts\TN_Landmass.cs" />
     <Compile Include="Assets\Scripts\CustomScripts\TN_MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\CustomScripts\TN_PlateTectonic.cs" />
     <Compile Include="Assets\Scripts\CustomScripts\TN_Region.cs" />
     <Compile Include="Assets\Scripts\HexScripts\Bezier.cs" />
     <Compile Include="Assets\Scripts\HexScripts\EdgeVertices.cs" />
