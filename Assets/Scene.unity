@@ -14859,6 +14859,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numPlates: 20
   cellsPerRegion: 20
+  numContinents: 3
+  numIslands: 0
+  landmassPercentage: 0.3
   hexGrid: {fileID: 1571186511}
 --- !u!1 &2073486282
 GameObject:

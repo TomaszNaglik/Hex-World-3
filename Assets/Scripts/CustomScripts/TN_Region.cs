@@ -8,7 +8,7 @@ public class TN_Region
 {
     List<HexCell> cells;
     List<HexCell> frontier;
-    List<TN_Region> neighbours;
+    public List<TN_Region> neighbours;
     private TN_PlateTectonic plate;
     private static int regionCounter = 0;
     public Color color;
@@ -33,19 +33,31 @@ public class TN_Region
     }
     public TN_PlateTectonic Plate { get => plate; set => plate = value; }
     public TN_Landmass Landmass { get => landmass;  set => landmass = value; }
-    public bool BordersLandmass
+    public bool BordersLandmassOtherThan(TN_Landmass landmass)
     {
-        get
+        
+        foreach(TN_Region neighbour in neighbours)
         {
-            foreach(TN_Region neighbour in neighbours)
+            if(neighbour!= null && neighbour.Landmass != null && neighbour.Landmass != landmass)
             {
-                if(neighbour!= null && neighbour.Landmass != null)
-                {
-                    return true;
-                }
+                return true;
             }
-            return false;
         }
+        return false;
+        
+    }
+    public bool BordersLandmass()
+    {
+
+        foreach (TN_Region neighbour in neighbours)
+        {
+            if (neighbour != null && neighbour.Landmass != null)
+            {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public bool IsPolar { get => isPolar; set => isPolar = value; }

@@ -42,6 +42,7 @@ public class TN_MapGenerator : MonoBehaviour
 
         
         CreateLandmasses();
+        ExpandLandmasses();
         
         
 
@@ -65,7 +66,7 @@ public class TN_MapGenerator : MonoBehaviour
                 regions.Add(region0);
             }
         }
-        regionLandBudget = (int)(regions.Count * landmassPercentage);
+        
         TN_Region region;
         TN_Landmass continent;
         int numAttempts = 0;
@@ -74,7 +75,7 @@ public class TN_MapGenerator : MonoBehaviour
         {
             numAttempts++;
             region = regions[UnityEngine.Random.Range(0, regions.Count-1)];
-            if (!region.IsPolar && region.Landmass == null && !region.BordersLandmass)
+            if (!region.IsPolar && region.Landmass == null && !region.BordersLandmass())
             {
                 continent = new TN_Landmass(region, true, 2);
                 landmasses.Add(continent);
@@ -83,6 +84,26 @@ public class TN_MapGenerator : MonoBehaviour
         }
         Debug.Log("Attempts: " + numAttempts);
         Debug.Log("Generated continents: "+landmasses.Count);
+    }
+
+    private void ExpandLandmasses()
+    {
+        int numAttempts = 0;
+        regionLandBudget = (int)(regions.Count * landmassPercentage);
+        Debug.Log("LandBudget: " + regionLandBudget);
+        while (regionLandBudget > 0 && numAttempts < maxNumAttempts)
+        {
+            numAttempts++;
+            Debug.Log("Attempt: " + numAttempts);
+            foreach (TN_Landmass continent in landmasses)
+            {
+                if (continent.Expand())
+                {
+                    regionLandBudget--;
+                    Debug.Log("LandBudget: " + regionLandBudget);
+                }
+            }
+        }
     }
 
     private void GeneratePlateTectonicSeeds(int cellCount)
