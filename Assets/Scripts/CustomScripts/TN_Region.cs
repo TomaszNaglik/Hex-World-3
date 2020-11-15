@@ -38,16 +38,31 @@ public class TN_Region
     }
     public TN_PlateTectonic Plate { get => plate; set => plate = value; }
     public TN_Landmass Landmass { get => landmass;  set => landmass = value; }
-    public bool BordersLandmassOtherThan(TN_Landmass landmass)
+    public bool BordersLandmassOtherThan(TN_Landmass landmass, int mandatoryLandmassSeparation, TN_Region region)
     {
         
-        foreach(TN_Region neighbour in neighbours)
+        foreach(TN_Region neighbour in region.neighbours)
         {
             if(neighbour!= null && neighbour.Landmass != null && neighbour.Landmass != landmass)
             {
                 return true;
             }
         }
+
+        if(mandatoryLandmassSeparation > 1)
+        {
+            foreach (TN_Region neighbour in region.neighbours)
+            {
+                if(neighbour !=null && neighbour.Landmass == null)
+                {
+                    if( BordersLandmassOtherThan(landmass, mandatoryLandmassSeparation - 1, neighbour))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        
         return false;
         
     }
