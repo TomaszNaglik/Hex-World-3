@@ -47,8 +47,20 @@ public class TN_Landmass
                 }
             }
         }
+        if(neighbours.Count == 0)
+        {
+            return false;
+        }
         TN_Region region1 = neighbours[UnityEngine.Random.Range(0, neighbours.Count)];
         
         return AddRegion(region1);
+    }
+
+    internal void GetMountains()
+    {
+        foreach (TN_Region region in regions)
+        {
+            region.GetMountains();
+        }
     }
 }

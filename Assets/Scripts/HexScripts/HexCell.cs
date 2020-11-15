@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System;
 
 public class HexCell : MonoBehaviour {
 
@@ -358,6 +359,18 @@ public class HexCell : MonoBehaviour {
 	public void SetNeighbor (HexDirection direction, HexCell cell) {
 		neighbors[(int)direction] = cell;
 		cell.neighbors[(int)direction.Opposite()] = this;
+	}
+
+	internal bool HasMountainNeighbour()
+	{
+		foreach(HexCell neighbour in neighbors)
+		{
+			if (Elevation < neighbour.Elevation)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public HexEdgeType GetEdgeType (HexDirection direction) {

@@ -9,12 +9,17 @@ public class TN_Region
     List<HexCell> cells;
     List<HexCell> frontier;
     public List<TN_Region> neighbours;
+
     private TN_PlateTectonic plate;
     private static int regionCounter = 0;
     public Color color;
     private int terrainIndex;
     private int elevationIndex;
     private int ID;
+    private float mountainProbability;
+    private float hillProbability;
+    
+
     private TN_Landmass landmass;
     public int TerrainIndex { get => terrainIndex; set => terrainIndex = value; }
 
@@ -63,18 +68,20 @@ public class TN_Region
     public bool IsPolar { get => isPolar; set => isPolar = value; }
 
     private bool isPolar;
-    public TN_Region(HexCell cell)
+    public TN_Region(HexCell cell, float _mountainProbability, float _hillProbability)
     {
         ID = regionCounter;
         regionCounter++;
 
+        mountainProbability = _mountainProbability;
+        hillProbability = _hillProbability;
 
         color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
         cells = new List<HexCell>();
         frontier = new List<HexCell>();
         neighbours = new List<TN_Region>();
 
-        TerrainIndex = UnityEngine.Random.Range(0, 5);
+        TerrainIndex = 1;// UnityEngine.Random.Range(0, 5);
         SetElevationIndex(2);
         if(UnityEngine.Random.value > 1.0f)
         {
@@ -100,9 +107,9 @@ public class TN_Region
         }
         cell.Region = this;
         cells.Add(cell);
-        //cell.TerrainTypeIndex = TerrainIndex;
+        cell.TerrainTypeIndex = TerrainIndex;
         cell.Elevation = GetElevationIndex();
-        cell.EnableHighlight(this.color);
+        //cell.EnableHighlight(this.color);
         if (cell.IsPolar)
         {
             this.isPolar = true;
@@ -182,38 +189,46 @@ public class TN_Region
         }
     }
 
-    /*internal void GetMountains()
+    internal void GetMountains()
     {
        
         foreach(HexCell cell in cells)
         {
             if (cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction))
             {
-                if (UnityEngine.Random.value > 0.4f)
-                {
-                    cell.Elevation += 3;
-                    cell.TerrainTypeIndex = 5;
-                }
-                if (cell.GetNeighbor(cell.Plate.Direction).Region.ElevationIndex < 1)
-                {
-                    ElevationIndex = cell.GetNeighbor(cell.Plate.Direction).Region.ElevationIndex + 1;
-                }
-            }
-            if (cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Next(HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction))
-                || cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Previous(HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction)))
-            {
-                if (UnityEngine.Random.value > 0.6f)
+                if (UnityEngine.Random.value > (1-mountainProbability))
                 {
                     cell.Elevation += 2;
+                    cell.TerrainTypeIndex = 5;
+                }
+               
+            }
+            else if (cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Next(HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction))
+                || cell.IsPlateBorder && cell.Plate.Direction == HexDirectionExtensions.Previous(HexDirectionExtensions.Opposite(cell.neighbourPlate.Direction)))
+            {
+                if (UnityEngine.Random.value > (1- hillProbability))
+                {
+                    cell.Elevation += 1;
+                    cell.TerrainTypeIndex = 3;
+                }
+            }
+            
+        }
+
+        foreach (HexCell cell in cells)
+        {
+            if (cell.HasMountainNeighbour())
+            {
+                if (UnityEngine.Random.value > (1 - hillProbability))
+                {
+                    cell.Elevation += 1;
                     cell.TerrainTypeIndex = 3;
                 }
             }
         }
-        foreach (HexCell cell in cells)
-        {
-            cell.Elevation += ElevationIndex;
-        }
-    }*/
+
+
+    }
 
    
 

@@ -51,7 +51,7 @@ public class TN_PlateTectonic
         cell.TerrainTypeIndex = TerrainIndex;
         cell.Elevation = ElevationIndex;
         cell.Plate = this;
-        cell.SetLabel(ID.ToString());
+        //cell.SetLabel(ID.ToString());
         cells.Add(cell);
         return true;
     }
@@ -109,13 +109,13 @@ public class TN_PlateTectonic
         }
     }*/
 
-    public void GenerateRegionSeeds()
+    public void GenerateRegionSeeds(float mountainProbability, float hillProbability)
     {
         regions = new List<TN_Region>();
         numRegions = cells.Count / cellsPerRegion;
         for (int i = 0; i < numRegions; i++)
         {
-            TN_Region region = new TN_Region(cells[UnityEngine.Random.Range(0, cells.Count)]);
+            TN_Region region = new TN_Region(cells[UnityEngine.Random.Range(0, cells.Count)], mountainProbability, hillProbability);
             regions.Add(region);
 
 

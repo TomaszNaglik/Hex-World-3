@@ -14,6 +14,9 @@ public class TN_MapGenerator : MonoBehaviour
     public int numContinents;
     public int numIslands;
 
+    public float mountainProbability = 0.4f;
+    public float hillProbability = 0.6f;
+
     public float landmassPercentage;
     private int regionLandBudget;
     
@@ -38,21 +41,21 @@ public class TN_MapGenerator : MonoBehaviour
         GenerateRegionSeeds();
         ExpandRegions();
         FindRegionNeighbours();
-        //GetMountains();
+        
 
         
         CreateLandmasses();
         ExpandLandmasses();
-        
-        
+        GetMountains();
 
-        
 
-       
 
-        
 
-        
+
+
+
+
+
 
 
     }
@@ -149,11 +152,11 @@ public class TN_MapGenerator : MonoBehaviour
     }
 
     
-    private void GenerateRegionSeeds()
+    private void GenerateRegionSeeds( )
     {
         foreach(TN_PlateTectonic plate in plates)
         {
-            plate.GenerateRegionSeeds();
+            plate.GenerateRegionSeeds(mountainProbability, hillProbability);
             
         }
     }
@@ -176,11 +179,11 @@ public class TN_MapGenerator : MonoBehaviour
 
     }
 
-   /* private void GetMountains()
+    private void GetMountains()
     {
-        foreach (TN_PlateTectonic plate in plates)
+        foreach (TN_Landmass landmass in landmasses)
         {
-            plate.GetMountains();
+            landmass.GetMountains();
         }
-    }*/
+    }
 }
